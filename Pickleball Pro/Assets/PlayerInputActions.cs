@@ -62,6 +62,33 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Leftclick"",
+                    ""type"": ""Button"",
+                    ""id"": ""4819e040-034c-48da-8f34-71405bfbb094"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Action"",
+                    ""type"": ""Button"",
+                    ""id"": ""c11ab6f7-6b8c-43c3-8431-c3eb108d904e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shift"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfd300d2-b4c2-489b-993d-07ad1d1559f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +179,39 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Recenter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b6d9b4a-eb8d-4962-bef1-7c7840b38369"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Leftclick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e0fcc5de-7e74-48f3-884e-195865c4ccde"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Action"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""299fc362-759c-4dca-b3a4-d824e7e379e9"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -181,6 +241,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Mouse = m_Player.FindAction("Mouse", throwIfNotFound: true);
         m_Player_Recenter = m_Player.FindAction("Recenter", throwIfNotFound: true);
+        m_Player_Leftclick = m_Player.FindAction("Leftclick", throwIfNotFound: true);
+        m_Player_Action = m_Player.FindAction("Action", throwIfNotFound: true);
+        m_Player_Shift = m_Player.FindAction("Shift", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -244,6 +307,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Mouse;
     private readonly InputAction m_Player_Recenter;
+    private readonly InputAction m_Player_Leftclick;
+    private readonly InputAction m_Player_Action;
+    private readonly InputAction m_Player_Shift;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -252,6 +318,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Mouse => m_Wrapper.m_Player_Mouse;
         public InputAction @Recenter => m_Wrapper.m_Player_Recenter;
+        public InputAction @Leftclick => m_Wrapper.m_Player_Leftclick;
+        public InputAction @Action => m_Wrapper.m_Player_Action;
+        public InputAction @Shift => m_Wrapper.m_Player_Shift;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -273,6 +342,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Recenter.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
                 @Recenter.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
                 @Recenter.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRecenter;
+                @Leftclick.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftclick;
+                @Leftclick.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftclick;
+                @Leftclick.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeftclick;
+                @Action.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
+                @Action.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
+                @Action.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAction;
+                @Shift.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShift;
+                @Shift.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShift;
+                @Shift.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShift;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -289,6 +367,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Recenter.started += instance.OnRecenter;
                 @Recenter.performed += instance.OnRecenter;
                 @Recenter.canceled += instance.OnRecenter;
+                @Leftclick.started += instance.OnLeftclick;
+                @Leftclick.performed += instance.OnLeftclick;
+                @Leftclick.canceled += instance.OnLeftclick;
+                @Action.started += instance.OnAction;
+                @Action.performed += instance.OnAction;
+                @Action.canceled += instance.OnAction;
+                @Shift.started += instance.OnShift;
+                @Shift.performed += instance.OnShift;
+                @Shift.canceled += instance.OnShift;
             }
         }
     }
@@ -308,5 +395,8 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnMouse(InputAction.CallbackContext context);
         void OnRecenter(InputAction.CallbackContext context);
+        void OnLeftclick(InputAction.CallbackContext context);
+        void OnAction(InputAction.CallbackContext context);
+        void OnShift(InputAction.CallbackContext context);
     }
 }
