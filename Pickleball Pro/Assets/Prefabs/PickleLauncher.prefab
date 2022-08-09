@@ -1839,6 +1839,7 @@ GameObject:
   - component: {fileID: 4877017188219821211}
   - component: {fileID: 5171873345440984506}
   - component: {fileID: 1982739823905035072}
+  - component: {fileID: 5839776477004372566}
   m_Layer: 0
   m_Name: PickleLauncher
   m_TagString: Untagged
@@ -1890,6 +1891,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 3.62, y: 3.62, z: 12.735367}
   m_Center: {x: 0, y: 0, z: -0.6170526}
+--- !u!54 &5839776477004372566
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5252734177842906657}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &5280350197341403961
 GameObject:
   m_ObjectHideFlags: 0

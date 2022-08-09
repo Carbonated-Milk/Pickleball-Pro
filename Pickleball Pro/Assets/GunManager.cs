@@ -21,16 +21,16 @@ public class GunManager : NetworkBehaviour
         inputActions.Player.Leftclick.started += Shoot;
         inputActions.Player.Leftclick.canceled += Shoot;
         inputActions.Player.E.started += PickUpCheck;
+        inputActions.Player.Rightclick.started += DropCheck;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
     void Shoot(InputAction.CallbackContext ctx)
     {
-        if(gun1 != null)
+        if (gun1 != null)
         {
             ShootServerRpc(ctx.started);
         }
@@ -49,24 +49,35 @@ public class GunManager : NetworkBehaviour
 
     void PickUpWeapon(Transform weapon)
     {
-        if(gun2 != null) { DropWeapon(gun2.transform); }
+        
+        if(gun1 != null) 
+        { 
+            if (gun2 != null)
+            {
+                DropWeapon(gun2.transform);
+            }
+            gun2 = gun1;
+            gun2.gameObject.SetActive(false);
+        }
 
-        gun2 = gun1;
         gun1 = weapon.GetComponent<Gun>();
-        gun2.gameObject.SetActive(false);
+        gun1.Hold(cam);
 
-        weapon.parent = cam;
-        weapon.position = cam.GetChild(0).position;
-        weapon.GetComponent<Collider>().enabled = false;
+    }
+
+    void DropCheck(InputAction.CallbackContext ctx)
+    {
+        if (gun1 == null) { return; }
+        DropWeapon(gun1.transform);
     }
 
     void DropWeapon(Transform weapon)
     {
-        weapon.parent = null;
-        weapon.position = cam.GetChild(0).position;
-        weapon.GetComponent<Collider>().enabled = true;
+        if (weapon == null) { return; }
+        weapon.GetComponent<Gun>().Drop();
+        gun1 = null;
 
-        if(gun2 != null) { gun1 = gun2; }
+        if (gun2 != null) { gun1 = gun2; gun2 = null; }
     }
 
     [ServerRpc]
@@ -78,7 +89,7 @@ public class GunManager : NetworkBehaviour
     [ClientRpc]
     void ShootTypeClientRpc(bool t)
     {
-        if(t)
+        if (t)
         {
             gun1.Shoot(transform.GetChild(0));
         }
@@ -89,7 +100,8 @@ public class GunManager : NetworkBehaviour
     }
 }
 
-public abstract class Gun: MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public abstract class Gun : MonoBehaviour
 {
     public virtual void Shoot(Transform t)
     {
@@ -98,5 +110,20 @@ public abstract class Gun: MonoBehaviour
     public virtual void Release(Transform t)
     {
 
+    }
+    public virtual void Hold(Transform holder)
+    {
+        GetComponent<Rigidbody>().isKinematic = true;
+        transform.parent = holder;
+        transform.position = holder.GetChild(0).position;
+        transform.localRotation = Quaternion.identity;
+        transform.GetComponent<Collider>().enabled = false;
+    }
+    public virtual void Drop()
+    {
+        gameObject.SetActive(true);
+        GetComponent<Rigidbody>().isKinematic = false;
+        transform.parent = null;
+        transform.GetComponent<Collider>().enabled = true;
     }
 }
