@@ -8,15 +8,19 @@ using Unity.Netcode;
 public class GunManager : NetworkBehaviour
 {
     private PlayerInputActions inputActions;
-    public IGun gun1;
+    public Gun gun1;
+    public Gun gun2;
+    public Transform cam;
     void Start()
     {
-        gun1 = transform.GetChild(1).GetComponent<IGun>();
+        cam = ImportantObjs.camera;
+
         if (!IsOwner) return;
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
         inputActions.Player.Leftclick.started += Shoot;
         inputActions.Player.Leftclick.canceled += Shoot;
+        inputActions.Player.E.started += PickUpCheck;
     }
 
     // Update is called once per frame
@@ -24,12 +28,47 @@ public class GunManager : NetworkBehaviour
     {
         
     }
-
     void Shoot(InputAction.CallbackContext ctx)
     {
-        ShootServerRpc(ctx.started);
+        if(gun1 != null)
+        {
+            ShootServerRpc(ctx.started);
+        }
     }
-    
+    void PickUpCheck(InputAction.CallbackContext ctx)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam.position, cam.forward, out hit, 3f))
+        {
+            if (hit.collider.GetComponent<Gun>() != null)
+            {
+                PickUpWeapon(hit.collider.transform);
+            }
+        }
+    }
+
+    void PickUpWeapon(Transform weapon)
+    {
+        if(gun2 != null) { DropWeapon(gun2.transform); }
+
+        gun2 = gun1;
+        gun1 = weapon.GetComponent<Gun>();
+        gun2.gameObject.SetActive(false);
+
+        weapon.parent = cam;
+        weapon.position = cam.GetChild(0).position;
+        weapon.GetComponent<Collider>().enabled = false;
+    }
+
+    void DropWeapon(Transform weapon)
+    {
+        weapon.parent = null;
+        weapon.position = cam.GetChild(0).position;
+        weapon.GetComponent<Collider>().enabled = true;
+
+        if(gun2 != null) { gun1 = gun2; }
+    }
+
     [ServerRpc]
     void ShootServerRpc(bool t)
     {
@@ -50,8 +89,14 @@ public class GunManager : NetworkBehaviour
     }
 }
 
-public interface IGun
+public abstract class Gun: MonoBehaviour
 {
-    void Shoot(Transform t);
-    void Release(Transform t);
+    public virtual void Shoot(Transform t)
+    {
+
+    }
+    public virtual void Release(Transform t)
+    {
+
+    }
 }

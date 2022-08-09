@@ -7,6 +7,11 @@ public class ExplodePickle : Pickle
 {
     public float explosionPower;
     public float explosionRadius;
+
+    private void Start()
+    {
+        RandRotate(3);
+    }
     public override void Action()
     {
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, explosionRadius);

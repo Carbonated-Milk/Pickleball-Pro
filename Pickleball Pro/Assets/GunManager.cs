@@ -14,7 +14,6 @@ public class GunManager : NetworkBehaviour
     void Start()
     {
         cam = ImportantObjs.camera;
-        Debug.Log(cam);
 
         if (!IsOwner) return;
         inputActions = new PlayerInputActions();

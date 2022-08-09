@@ -116,9 +116,3 @@ public class Movement : NetworkBehaviour
         Gizmos.DrawSphere(transform.position - groundSphereCheck.x * Vector3.up, groundSphereCheck.y);
     }
 }
-
-public static class ImportantObjs
-{
-    public static Transform player;
-    public static Transform camera;
-}

@@ -22,15 +22,18 @@ public class Movement : NetworkBehaviour
     {
         if (!IsOwner) { Destroy(this); }
     }
+
+    private void Awake()
+    {
+        cam = transform.GetChild(0).transform;
+        ImportantObjs.camera = cam;
+        ImportantObjs.player = transform;
+    }
     void Start()
     {
         transform.GetChild(0).gameObject.SetActive(true);
 
         rb = GetComponent<Rigidbody>();
-        cam = transform.GetChild(0).transform;
-
-        ImportantObjs.camera = cam;
-        ImportantObjs.player = transform;
 
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
@@ -40,6 +43,15 @@ public class Movement : NetworkBehaviour
         inputActions.Player.Recenter.started += Recenter;
         inputActions.Player.Shift.started += Speedy;
         inputActions.Player.Shift.canceled += Speedy;
+    }
+
+    public void Update()
+    {
+        /*RaycastHit hit;
+        if(Physics.Raycast(cam.position, cam.forward, out hit, 3f))
+        {
+
+        }*/
     }
 
     void Move(InputAction.CallbackContext ctx)
@@ -103,10 +115,4 @@ public class Movement : NetworkBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawSphere(transform.position - groundSphereCheck.x * Vector3.up, groundSphereCheck.y);
     }
-}
-
-public static class ImportantObjs
-{
-    public static Transform player;
-    public static Transform camera;
 }
