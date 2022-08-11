@@ -101,6 +101,7 @@ public class GunManager : NetworkBehaviour
 }
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(NetworkObject))]
 public abstract class Gun : NetworkBehaviour
 {
     private NetworkObject netObj;
@@ -108,6 +109,11 @@ public abstract class Gun : NetworkBehaviour
     private void Start()
     {
         netObj = GetComponent<NetworkObject>();
+        Invoke("keba", 5);
+    }
+    private void keba()
+    {
+        GetComponent<NetworkObject>().Spawn();
     }
     public virtual void Shoot(Transform t)
     {
@@ -120,8 +126,8 @@ public abstract class Gun : NetworkBehaviour
     public virtual void Hold(Transform holder)
     {
         GetComponent<Rigidbody>().isKinematic = true;
-        netObj.TrySetParent(holder);
-        transform.position = holder.GetChild(0).position;
+        ChangeParentServerRpc(true);
+        //transform.position = holder.GetChild(0).position;
         transform.localRotation = Quaternion.identity;
         transform.GetComponent<Collider>().enabled = false;
     }
@@ -129,7 +135,14 @@ public abstract class Gun : NetworkBehaviour
     {
         gameObject.SetActive(true);
         GetComponent<Rigidbody>().isKinematic = false;
-        netObj.TrySetParent((Transform)null);
+        ChangeParentServerRpc(false);
         transform.GetComponent<Collider>().enabled = true;
+    }
+
+    [ServerRpc]
+    void ChangeParentServerRpc(bool eo)
+    {
+        if (eo) Debug.Log(netObj.TrySetParent(FindObjectOfType<Camera>().transform));
+        else Debug.Log(netObj.TrySetParent((Transform)null));
     }
 }
