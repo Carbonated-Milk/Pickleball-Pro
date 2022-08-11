@@ -101,8 +101,14 @@ public class GunManager : NetworkBehaviour
 }
 
 [RequireComponent(typeof(Rigidbody))]
-public abstract class Gun : MonoBehaviour
+public abstract class Gun : NetworkBehaviour
 {
+    private NetworkObject netObj;
+
+    private void Start()
+    {
+        netObj = GetComponent<NetworkObject>();
+    }
     public virtual void Shoot(Transform t)
     {
 
@@ -114,7 +120,7 @@ public abstract class Gun : MonoBehaviour
     public virtual void Hold(Transform holder)
     {
         GetComponent<Rigidbody>().isKinematic = true;
-        transform.parent = holder;
+        netObj.TrySetParent(holder);
         transform.position = holder.GetChild(0).position;
         transform.localRotation = Quaternion.identity;
         transform.GetComponent<Collider>().enabled = false;
@@ -123,7 +129,7 @@ public abstract class Gun : MonoBehaviour
     {
         gameObject.SetActive(true);
         GetComponent<Rigidbody>().isKinematic = false;
-        transform.parent = null;
+        netObj.TrySetParent((Transform)null);
         transform.GetComponent<Collider>().enabled = true;
     }
 }
