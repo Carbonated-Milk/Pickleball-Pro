@@ -27,6 +27,7 @@ public class Movement : NetworkBehaviour
     {
         cam = transform.GetChild(0).transform;
         ImportantObjs.camera = cam;
+        cam.GetComponent<NetworkObject>().Spawn();
         ImportantObjs.player = transform;
     }
     void Start()

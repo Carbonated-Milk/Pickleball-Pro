@@ -113,7 +113,7 @@ public abstract class Gun : NetworkBehaviour
     }
     private void keba()
     {
-        GetComponent<NetworkObject>().Spawn();
+        //GetComponent<NetworkObject>().Spawn();
     }
     public virtual void Shoot(Transform t)
     {
@@ -142,7 +142,7 @@ public abstract class Gun : NetworkBehaviour
     [ServerRpc]
     void ChangeParentServerRpc(bool eo)
     {
-        if (eo) Debug.Log(netObj.TrySetParent(FindObjectOfType<Camera>().transform));
-        else Debug.Log(netObj.TrySetParent((Transform)null));
+        if (eo) {transform.parent = ImportantObjs.camera; transform.position = ImportantObjs.camera.GetChild(0).position; }
+        else transform.parent = null;
     }
 }
