@@ -109,11 +109,6 @@ public abstract class Gun : NetworkBehaviour
     private void Start()
     {
         netObj = GetComponent<NetworkObject>();
-        Invoke("keba", 5);
-    }
-    private void keba()
-    {
-        //GetComponent<NetworkObject>().Spawn();
     }
     public virtual void Shoot(Transform t)
     {

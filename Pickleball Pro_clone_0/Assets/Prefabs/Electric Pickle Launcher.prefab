@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3144400792441010720}
   - component: {fileID: 5093822932256373903}
-  - component: {fileID: 1912934542859683810}
+  - component: {fileID: -5547338245683137266}
   - component: {fileID: 7909287661593310328}
   - component: {fileID: 8995369317935899754}
   - component: {fileID: 7501175527337215504}
@@ -53,7 +53,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1912934542859683810
+--- !u!114 &-5547338245683137266
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -62,12 +62,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7993213436332197079}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7689019ca0483b74cb5574d1a5ef7087, type: 3}
+  m_Script: {fileID: 11500000, guid: 797b33ee211e45a42bb7d6b6c5bd64dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explodePickle: {fileID: 3198056612526704353, guid: b5105f89144939a4ea49f61cf6c854e3,
+  chargePickle: {fileID: 3198056612526704353, guid: b5105f89144939a4ea49f61cf6c854e3,
     type: 3}
-  speed: 0
+  speed: 5
 --- !u!114 &7909287661593310328
 MonoBehaviour:
   m_ObjectHideFlags: 0
