@@ -6,7 +6,7 @@ public abstract class Pickle : MonoBehaviour
 {
     [SerializeField]
     protected GameObject particalSystem;
-    protected Rigidbody rb;
+    [HideInInspector] public Rigidbody rb;
     public abstract void Action();
 
     private void Awake()
