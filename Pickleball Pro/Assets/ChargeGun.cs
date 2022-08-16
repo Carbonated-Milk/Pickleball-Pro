@@ -8,6 +8,7 @@ public class ChargeGun : Gun
     public GameObject chargePickle;
     public float speed;
     private GameObject pickleSpace;
+    private float power;
 
     public override void Shoot(Transform netObj)
     {
@@ -19,7 +20,7 @@ public class ChargeGun : Gun
     {
         StopAllCoroutines();
         pickleSpace.GetComponent<Collider>().enabled = true;
-        pickleSpace.GetComponent<Rigidbody>().velocity = netObj.forward * speed;
+        pickleSpace.GetComponent<Rigidbody>().velocity = netObj.forward * power * speed;
         Reset();
     }
 
@@ -30,8 +31,11 @@ public class ChargeGun : Gun
 
     public IEnumerator ChargeUp(GameObject projectile, Transform netObj)
     {
+        power = 0;
+
         while(true)
         {
+            power += Time.deltaTime;
             pickleSpace.transform.position = netObj.position + netObj.forward * 2;
             yield return null;
         }

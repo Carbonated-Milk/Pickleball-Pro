@@ -104,11 +104,13 @@ public class GunManager : NetworkBehaviour
 [RequireComponent(typeof(NetworkObject))]
 public abstract class Gun : NetworkBehaviour
 {
-    private NetworkObject netObj;
+    protected NetworkObject netObj;
+    protected Rigidbody rb;
 
     private void Start()
     {
         netObj = GetComponent<NetworkObject>();
+        rb = GetComponent<Rigidbody>();
     }
     public virtual void Shoot(Transform t)
     {
@@ -129,7 +131,7 @@ public abstract class Gun : NetworkBehaviour
     public virtual void Drop()
     {
         gameObject.SetActive(true);
-        GetComponent<Rigidbody>().isKinematic = false;
+        rb.isKinematic = false;
         ChangeParentServerRpc(false);
         transform.GetComponent<Collider>().enabled = true;
     }
