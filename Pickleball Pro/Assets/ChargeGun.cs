@@ -21,6 +21,7 @@ public class ChargeGun : Gun
         StopAllCoroutines();
         pickleSpace.GetComponent<Collider>().enabled = true;
         pickleSpace.GetComponent<Rigidbody>().velocity = netObj.forward * power * speed;
+        pickleSpace.transform.position = netObj.position + netObj.forward * 2;
         Reset();
     }
 

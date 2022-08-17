@@ -18,12 +18,12 @@ public class PickleAfterImage : MonoBehaviour
     private IEnumerator Expand()
     {
         float vis = 1;
-        mat.shader.GetPropertyName(1);
-        mat.SetFloat("Visibility", .5f);
+        
         while(vis > 0)
         {
-            transform.localScale += Time.deltaTime * Vector3.one;
+            transform.localScale += 50 * Time.deltaTime * Vector3.one;
             vis -= Time.deltaTime;
+            mat.SetFloat("_Visibility", vis);
             yield return null;
         }
         Destroy(this.gameObject);

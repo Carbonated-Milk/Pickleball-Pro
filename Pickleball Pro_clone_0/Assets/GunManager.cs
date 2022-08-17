@@ -77,7 +77,17 @@ public class GunManager : NetworkBehaviour
         weapon.GetComponent<Gun>().Drop();
         gun1 = null;
 
-        if (gun2 != null) { gun1 = gun2; gun2 = null; }
+        if (gun2 != null) { gun1 = gun2; gun2 = null; gun1.Activate(true); }
+    }
+
+    void Swap()
+    {
+        Gun temp;
+        temp = gun1;
+        gun1 = gun2;
+        gun2 = temp;
+        gun1.Activate(true);
+        gun2.Activate(false);
     }
 
     [ServerRpc]
@@ -134,6 +144,18 @@ public abstract class Gun : NetworkBehaviour
         rb.isKinematic = false;
         ChangeParentServerRpc(false);
         transform.GetComponent<Collider>().enabled = true;
+    }
+
+    public void Activate(bool turnOn)
+    {
+        if(turnOn)
+        {
+            gameObject.SetActive(true);
+        }
+        if (!turnOn)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     [ServerRpc]

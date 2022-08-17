@@ -7,6 +7,7 @@ public class ExplodePickle : Pickle
 {
     public float explosionPower;
     public float explosionRadius;
+    public bool displayRadius;
 
     private void Start()
     {
@@ -34,7 +35,10 @@ public class ExplodePickle : Pickle
     void OnDrawGizmosSelected()
     {
         // Draw a yellow sphere at the transform's position
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position, explosionRadius);
+        if(displayRadius)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(transform.position, explosionRadius);
+        }
     }
 }

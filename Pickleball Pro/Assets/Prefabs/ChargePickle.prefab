@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8885521221070439222}
   - component: {fileID: 1311506214108453560}
   m_Layer: 0
-  m_Name: ChargePickle
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

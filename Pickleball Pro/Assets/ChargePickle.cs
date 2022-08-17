@@ -40,11 +40,12 @@ public class ChargePickle : Pickle
 
         while (true)
         {
-            if (Time.time - time > 2)
+            if (Time.time - time > .2)
             {
-                Instantiate(afterPickle).gameObject.SetActive(true);
+                Instantiate(afterPickle, transform).gameObject.SetActive(true);
                 time = Time.time;
             }
+            yield return null;
         }
     }
 
