@@ -30,7 +30,7 @@ public class FastGun : Gun
 
         while (true)
         {
-            barrel.Rotate(Time.deltaTime * rotSpeed * Vector3.right);
+            barrel.Rotate(10 * Time.deltaTime * rotSpeed * Vector3.right);
             if(Time.time - time > 1 / rotSpeed * 10)
             {
                 MakePickle(netObj);
@@ -60,7 +60,7 @@ public class FastGun : Gun
     {
         while (rotSpeed > 0)
         {
-            barrel.Rotate(Time.deltaTime * rotSpeed * Vector3.right);
+            barrel.Rotate(10 * Time.deltaTime * rotSpeed * Vector3.right);
             rotSpeed -= Time.deltaTime * 100;
             yield return null;
         }

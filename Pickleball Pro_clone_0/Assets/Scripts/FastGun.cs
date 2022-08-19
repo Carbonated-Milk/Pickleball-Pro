@@ -10,10 +10,11 @@ public class FastGun : Gun
     public float speed;
     public float power;
     public float maxRotSpeed;
-    private float rotSpeed;
+    private float rotSpeed = 0.0001f;
 
     public override void Shoot(Transform netObj)
     {
+        StopAllCoroutines();
         StartCoroutine(CommenseFire(netObj));
         StartCoroutine(SpeedUp());
     }
@@ -29,8 +30,8 @@ public class FastGun : Gun
 
         while (true)
         {
-            barrel.Rotate(Time.deltaTime * rotSpeed * Vector3.forward);
-            if(Time.time - time > 1)
+            barrel.Rotate(10 * Time.deltaTime * rotSpeed * Vector3.right);
+            if(Time.time - time > 1 / rotSpeed * 10)
             {
                 MakePickle(netObj);
                 time = Time.time;
@@ -51,17 +52,18 @@ public class FastGun : Gun
 
         while(rotSpeed < maxRotSpeed)
         {
-            rotSpeed += Time.deltaTime * 20;
+            rotSpeed += Time.deltaTime * 50;
             yield return null;
         }
     }
     public IEnumerator SlowDown()
     {
-        while (rotSpeed > maxRotSpeed)
+        while (rotSpeed > 0)
         {
-            barrel.Rotate(Time.deltaTime * rotSpeed * Vector3.forward);
-            rotSpeed -= Time.deltaTime;
+            barrel.Rotate(10 * Time.deltaTime * rotSpeed * Vector3.right);
+            rotSpeed -= Time.deltaTime * 100;
             yield return null;
         }
+        rotSpeed = 0.0001f;
     }
 }
