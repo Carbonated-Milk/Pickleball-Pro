@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.Netcode;
+using Unity.Networking;
 
 
 public class GunManager : NetworkBehaviour
@@ -112,10 +113,12 @@ public class GunManager : NetworkBehaviour
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NetworkObject))]
+
 public abstract class Gun : NetworkBehaviour
 {
     protected NetworkObject netObj;
     protected Rigidbody rb;
+    private Transform hold;
 
     private void Start()
     {
@@ -133,8 +136,7 @@ public abstract class Gun : NetworkBehaviour
     public virtual void Hold(Transform holder)
     {
         GetComponent<Rigidbody>().isKinematic = true;
-        ChangeParentServerRpc(true);
-        //transform.position = holder.GetChild(0).position;
+        ChangeParentServerRpc(0); //AAAAAAAAAAAAAAAAAAAA
         transform.localRotation = Quaternion.identity;
         transform.GetComponent<Collider>().enabled = false;
     }
@@ -142,7 +144,7 @@ public abstract class Gun : NetworkBehaviour
     {
         gameObject.SetActive(true);
         rb.isKinematic = false;
-        ChangeParentServerRpc(false);
+        ChangeParentServerRpc(0);
         transform.GetComponent<Collider>().enabled = true;
     }
 
@@ -158,10 +160,19 @@ public abstract class Gun : NetworkBehaviour
         }
     }
 
-    [ServerRpc]
-    void ChangeParentServerRpc(bool eo)
+    [ServerRpc(RequireOwnership = false)]
+    void ChangeParentServerRpc(ulong clientId)
     {
-        if (eo) {transform.parent = ImportantObjs.camera; transform.position = ImportantObjs.camera.GetChild(0).position; }
-        else transform.parent = null;
+        if (clientId != 0) {hold = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.transform; }
+        else hold = null;
+    }
+
+    private void Update()
+    {
+        if(hold != null)
+        {
+            transform.position = hold.position;
+            transform.rotation = hold.rotation;
+        }
     }
 }

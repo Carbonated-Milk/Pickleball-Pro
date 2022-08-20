@@ -43,7 +43,7 @@ public class FastGun : Gun
     private void MakePickle(Transform origin)
     {
         Pickle newPickle = Instantiate(smallPickle).GetComponent<Pickle>();
-        newPickle.GetComponent<Rigidbody>().velocity = origin.forward * power * speed;
+        newPickle.GetComponent<Rigidbody>().velocity = power * (speed + rotSpeed/10) * origin.forward;
         newPickle.transform.position = origin.position + origin.forward * 2;
     }
 
