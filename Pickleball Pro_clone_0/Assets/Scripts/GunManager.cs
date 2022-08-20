@@ -136,7 +136,7 @@ public abstract class Gun : NetworkBehaviour
     public virtual void Hold(Transform holder)
     {
         GetComponent<Rigidbody>().isKinematic = true;
-        ChangeParentServerRpc(0); //AAAAAAAAAAAAAAAAAAAA
+        ChangeParentServerRpc(holder.GetInstanceID()); //AAAAAAAAAAAAAAAAAAAA
         transform.localRotation = Quaternion.identity;
         transform.GetComponent<Collider>().enabled = false;
     }
@@ -161,9 +161,9 @@ public abstract class Gun : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    void ChangeParentServerRpc(ulong clientId)
+    void ChangeParentServerRpc(int clientId)
     {
-        if (clientId != 0) {hold = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.transform; }
+        if (clientId != 0) {hold = FindObjectFromInstanceID(clientId); }
         else hold = null;
     }
 
@@ -174,5 +174,12 @@ public abstract class Gun : NetworkBehaviour
             transform.position = hold.position;
             transform.rotation = hold.rotation;
         }
+    }
+    public static Object FindObjectFromInstanceID(int iid)
+    {
+        return (Object)typeof(Object)
+                .GetMethod("FindObjectFromInstanceID", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
+                .Invoke(null, new object[] { iid });
+
     }
 }
