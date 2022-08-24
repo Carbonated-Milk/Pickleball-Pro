@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class Movement : NetworkBehaviour
 {
+    public GameObject netCamera;
     private Rigidbody rb;
     private Transform cam;
     public float maxSpeed;
@@ -21,6 +22,16 @@ public class Movement : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) { Destroy(this); }
+        else
+        {
+            cam = Instantiate(netCamera).transform;
+            //cam.GetComponent<NetworkObject>().Spawn();
+            GetComponent<GunManager>().cam = this.cam;
+            cam.GetComponent<Camera>().enabled = true;
+            cam.GetComponent<AudioListener>().enabled = true;
+            Debug.Log(cam.GetComponent<NetworkObject>().TrySetParent(GetComponent<NetworkObject>()));
+            GetComponent<GunManager>().cam = this.cam;
+        }
     }
 
     private void Awake()
@@ -48,6 +59,7 @@ public class Movement : NetworkBehaviour
 
     public void Update()
     {
+        
         /*RaycastHit hit;
         if(Physics.Raycast(cam.position, cam.forward, out hit, 3f))
         {

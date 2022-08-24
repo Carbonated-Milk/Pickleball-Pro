@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 1.26504, g: 1.6740237, b: 1.7841858, a: 1}
+  m_IndirectSpecularColor: {r: 1.2651429, g: 1.6743169, b: 1.7838901, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -271,6 +271,18 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
+      Prefab: {fileID: 616643583314585597, guid: 3c68c02aac2dcda4e84bb9f5dff425dd,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 909647598316727151, guid: b1b738167435fbc428fe47b4a84c680f,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
       Prefab: {fileID: 5252734177842906657, guid: 1aa4ffb72e808414f9e0af6c1c918010,
         type: 3}
       SourcePrefabToOverride: {fileID: 0}
@@ -278,12 +290,6 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 7993213436332197079, guid: e5b1ea596b27e414b844586376843d0f,
-        type: 3}
-      SourcePrefabToOverride: {fileID: 0}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
-    - Override: 0
-      Prefab: {fileID: 909647598316727151, guid: b1b738167435fbc428fe47b4a84c680f,
         type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
@@ -1293,7 +1299,7 @@ PrefabInstance:
     - target: {fileID: 5319042747517523352, guid: b1b738167435fbc428fe47b4a84c680f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.3559837
+      value: -1.87
       objectReference: {fileID: 0}
     - target: {fileID: 5319042747517523352, guid: b1b738167435fbc428fe47b4a84c680f,
         type: 3}

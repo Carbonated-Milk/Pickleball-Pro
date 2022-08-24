@@ -14,7 +14,6 @@ public class GunManager : NetworkBehaviour
     public Transform cam;
     void Start()
     {
-        cam = ImportantObjs.camera;
 
         if (!IsOwner) return;
         inputActions = new PlayerInputActions();
@@ -62,7 +61,7 @@ public class GunManager : NetworkBehaviour
         }
 
         gun1 = weapon.GetComponent<Gun>();
-        gun1.Hold(cam);
+        gun1.Hold(cam.GetComponent<NetworkObject>());
 
     }
 
@@ -102,11 +101,11 @@ public class GunManager : NetworkBehaviour
     {
         if (t)
         {
-            gun1.Shoot(transform.GetChild(0));
+            gun1.Shoot(cam);
         }
         else
         {
-            gun1.Release(transform.GetChild(0));
+            gun1.Release(cam);
         }
     }
 }
@@ -133,18 +132,20 @@ public abstract class Gun : NetworkBehaviour
     {
 
     }
-    public virtual void Hold(Transform holder)
+    public virtual void Hold(NetworkObject holder)
     {
         GetComponent<Rigidbody>().isKinematic = true;
-        ChangeParentServerRpc(holder.GetInstanceID()); //AAAAAAAAAAAAAAAAAAAA
+        netObj.TrySetParent(holder);
+        //ChangeParentServerRpc(holder); //AAAAAAAAAAAAAAAAAAAA
         transform.localRotation = Quaternion.identity;
+        transform.position = holder.transform.GetChild(0).position;
         transform.GetComponent<Collider>().enabled = false;
     }
     public virtual void Drop()
     {
         gameObject.SetActive(true);
         rb.isKinematic = false;
-        ChangeParentServerRpc(0);
+        transform.parent = null;
         transform.GetComponent<Collider>().enabled = true;
     }
 
@@ -160,20 +161,17 @@ public abstract class Gun : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    void ChangeParentServerRpc(int clientId)
+    /*[ServerRpc(RequireOwnership = false)]
+    void ChangeParentServerRpc(NetworkObject parentObj)
     {
-        if (clientId != 0) {hold = FindObjectFromInstanceID(clientId); }
+        if (netObj != null) { Debug.Log(netObj.TrySetParent(parentObj)); }
         else hold = null;
-    }
+    }*/
 
     private void Update()
     {
-        if(hold != null)
-        {
-            transform.position = hold.position;
-            transform.rotation = hold.rotation;
-        }
+        if(netObj == null) { netObj = GetComponent<NetworkObject>(); }
+        
     }
     public static Object FindObjectFromInstanceID(int iid)
     {
