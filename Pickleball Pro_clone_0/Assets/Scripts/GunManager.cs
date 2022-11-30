@@ -187,7 +187,7 @@ public abstract class Gun : NetworkBehaviour
 
     }
 
-    [ServerRpc]
+    [ServerRpc(RequireOwnership = false)]
     public void SetParentServerRpc()
     {
         ShootTypeClientRpc();
@@ -196,6 +196,6 @@ public abstract class Gun : NetworkBehaviour
     [ClientRpc]
     void ShootTypeClientRpc()
     {
-        transform.parent.GetComponent<GunManager>().gun1 = this;
+        //transform.parent.GetComponent<GunManager>().gun1 = this;
     }
 }

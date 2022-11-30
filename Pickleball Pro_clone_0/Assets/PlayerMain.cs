@@ -16,7 +16,7 @@ public class PlayerMain : NetworkBehaviour
     public TMP_Text damageText;
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) { Destroy(GetComponent<Movement>()); Destroy(this); }
+        if (!IsOwner) { Destroy(GetComponent<Movement>()); return; }
         else
         {
             SetUpCamera();
@@ -38,6 +38,7 @@ public class PlayerMain : NetworkBehaviour
 
     private void Awake()
     {
+        if (!IsOwner) { return; }
         ImportantObjs.camera = cam;
         //cam.GetComponent<NetworkObject>().Spawn();
         ImportantObjs.player = transform;
