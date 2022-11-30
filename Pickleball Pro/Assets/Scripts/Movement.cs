@@ -6,41 +6,27 @@ using UnityEngine.InputSystem;
 
 public class Movement : NetworkBehaviour
 {
-    public GameObject netCamera;
     private Rigidbody rb;
-    private Transform cam;
+    public Transform cam;
+    private PlayerInputActions inputActions;
+
     public float maxSpeed;
     public float speed;
     public float jumpPow;
     public float sensitivity = 1f;
     public Vector2 center;
-    private PlayerInputActions inputActions;
     private bool grounded = false;
+
+
+
     public LayerMask groundMask;
     public Vector2 groundSphereCheck;
 
     public override void OnNetworkSpawn()
     {
         if (!IsOwner) { Destroy(this); }
-        else
-        {
-            cam = Instantiate(netCamera).transform;
-            //cam.GetComponent<NetworkObject>().Spawn();
-            GetComponent<GunManager>().cam = this.cam;
-            cam.GetComponent<Camera>().enabled = true;
-            cam.GetComponent<AudioListener>().enabled = true;
-            Debug.Log(cam.GetComponent<NetworkObject>().TrySetParent(GetComponent<NetworkObject>()));
-            GetComponent<GunManager>().cam = this.cam;
-        }
     }
 
-    private void Awake()
-    {
-        cam = transform.GetChild(0).transform;
-        ImportantObjs.camera = cam;
-        //cam.GetComponent<NetworkObject>().Spawn();
-        ImportantObjs.player = transform;
-    }
     void Start()
     {
         transform.GetChild(0).gameObject.SetActive(true);
@@ -49,28 +35,12 @@ public class Movement : NetworkBehaviour
 
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
-        inputActions.Player.Movement.performed += Move;
+        //inputActions.Player.Movement.performed += Move;
         inputActions.Player.Jump.performed += Jump;
         inputActions.Player.Mouse.performed += Mouse;
         inputActions.Player.Recenter.started += Recenter;
         inputActions.Player.Shift.started += Speedy;
         inputActions.Player.Shift.canceled += Speedy;
-    }
-
-    public void Update()
-    {
-        
-        /*RaycastHit hit;
-        if(Physics.Raycast(cam.position, cam.forward, out hit, 3f))
-        {
-
-        }*/
-    }
-
-    void Move(InputAction.CallbackContext ctx)
-    {
-        /*Vector2 moveVector = speed * ctx.ReadValue<Vector2>();
-        rb.AddForce(moveVector.x * transform.right + moveVector.y * transform.forward);*/
     }
 
     void Speedy(InputAction.CallbackContext ctx)
@@ -80,7 +50,7 @@ public class Movement : NetworkBehaviour
     }
     void Jump(InputAction.CallbackContext ctx)
     {
-        if(grounded)
+        if (grounded)
         {
             rb.AddForce(jumpPow * Vector3.up);
         }
@@ -116,11 +86,12 @@ public class Movement : NetworkBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         grounded = true;
+        if (collision.gameObject.CompareTag("Death")) { GetComponent<PlayerMain>().Die(); }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        
+
     }
     void OnDrawGizmosSelected()
     {

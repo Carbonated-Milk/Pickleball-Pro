@@ -6,7 +6,9 @@ public abstract class Pickle : MonoBehaviour
 {
     [SerializeField]
     protected GameObject particalSystem;
+    protected float damage = 5;
     [HideInInspector] public Rigidbody rb;
+    private bool detonated = false;
     public abstract void Action();
 
     private void Awake()
@@ -15,6 +17,12 @@ public abstract class Pickle : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
+        detonated = true;
+        if(collision.gameObject.CompareTag("Player"))
+        {
+            collision.gameObject.GetComponent<PlayerMain>().Damage = 5; //adds 5 to damage
+            //nearRB.AddExplosionForce(500 + player.damage, transform.position, 5f, 3f); fix later
+        }
         Action();
     }
     public void RandRotate(float multiplier)

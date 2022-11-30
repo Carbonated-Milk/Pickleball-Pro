@@ -21,9 +21,11 @@ public class ExplodePickle : Pickle
             Rigidbody nearRB = nearbyObject.GetComponent<Rigidbody>();
             if(nearbyObject.transform.CompareTag("Player"))
             {
-                
+                var player = nearbyObject.GetComponent<PlayerMain>();
+                nearRB.AddExplosionForce(explosionPower + player.damage, transform.position, explosionRadius, 3f);
+                player.Damage = 3;
             }
-            if(nearRB != null)
+            else if(nearRB != null)
             {
                 nearRB.AddExplosionForce(explosionPower, transform.position, explosionRadius, 3f);
             }

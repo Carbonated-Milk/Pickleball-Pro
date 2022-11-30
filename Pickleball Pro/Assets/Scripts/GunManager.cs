@@ -12,9 +12,9 @@ public class GunManager : NetworkBehaviour
     public Gun gun1;
     public Gun gun2;
     public Transform cam;
+    public Transform shootPoint;
     void Start()
     {
-
         if (!IsOwner) return;
         inputActions = new PlayerInputActions();
         inputActions.Player.Enable();
@@ -26,7 +26,11 @@ public class GunManager : NetworkBehaviour
 
     private void Update()
     {
-        
+        if(gun1 != null)
+        {
+            gun1.GetComponent<Transform>().position = shootPoint.position;
+            gun1.GetComponent<Transform>().rotation = shootPoint.rotation;
+        }
     }
     void Shoot(InputAction.CallbackContext ctx)
     {
@@ -62,6 +66,8 @@ public class GunManager : NetworkBehaviour
 
         gun1 = weapon.GetComponent<Gun>();
         gun1.Hold(cam.GetComponent<NetworkObject>());
+        gun1.transform.parent = transform;
+        gun1.SetParentServerRpc();
 
     }
 
@@ -117,7 +123,7 @@ public abstract class Gun : NetworkBehaviour
 {
     protected NetworkObject netObj;
     protected Rigidbody rb;
-    private Transform hold;
+    //private Transform hold;
 
     private void Start()
     {
@@ -135,10 +141,10 @@ public abstract class Gun : NetworkBehaviour
     public virtual void Hold(NetworkObject holder)
     {
         GetComponent<Rigidbody>().isKinematic = true;
-        netObj.TrySetParent(holder);
+        /*netObj.TrySetParent(holder);
         //ChangeParentServerRpc(holder); //AAAAAAAAAAAAAAAAAAAA
         transform.localRotation = Quaternion.identity;
-        transform.position = holder.transform.GetChild(0).position;
+        transform.position = holder.transform.GetChild(0).position;*/
         transform.GetComponent<Collider>().enabled = false;
     }
     public virtual void Drop()
@@ -179,5 +185,17 @@ public abstract class Gun : NetworkBehaviour
                 .GetMethod("FindObjectFromInstanceID", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)
                 .Invoke(null, new object[] { iid });
 
+    }
+
+    [ServerRpc]
+    public void SetParentServerRpc()
+    {
+        ShootTypeClientRpc();
+    }
+
+    [ClientRpc]
+    void ShootTypeClientRpc()
+    {
+        transform.parent.GetComponent<GunManager>().gun1 = this;
     }
 }
